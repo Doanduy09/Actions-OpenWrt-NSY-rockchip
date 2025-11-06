@@ -248,6 +248,7 @@ jobs:
         # 确保当前目录可写
         sudo chmod -R +w ./
         # 复制自定义机型配置文件到源码根目录
+        chmod -R 775 $GITHUB_WORKSPACE/userpatches/$SYSTEM/
         rsync -av --progress $GITHUB_WORKSPACE/userpatches/${{ env.SYSTEM }}/ $OPENWRT_PATH/
         # cp --preserve=all -r $GITHUB_WORKSPACE/userpatches/${{ env.SYSTEM }}/* $OPENWRT_PATH/
         
