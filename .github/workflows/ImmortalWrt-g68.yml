@@ -32,7 +32,7 @@ on:
       BRANCH:
         description: '系统版本 (带 .y 匹配最新 tag)'
         required: true
-        default: 'openwrt-24.10'
+        default: 'v24.10.y'
         type: choice
         options:
           - main
@@ -42,13 +42,24 @@ on:
           - v24.10.3
           - v24.10.4
           - v24.10.y
+
+      CONFIG:
+        description: '配置文件'
+        required: true
+        default: '_test'
+        type: choice
+        options:
+          - ''
+          - _mtk_wifi
+          - -docker
+          - _test
           
 env:
   BOARD: ${{ inputs.BOARD || 'g68-plus'}}
   SYSTEM: ${{ inputs.SYSTEM || 'immortalwrt'}}
   REPO_BRANCH: ${{ inputs.BRANCH || 'openwrt-24.10'}}
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'immortalwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}_mtk_wifi.config
+  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'immortalwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || ''}}.config
   DIY_P1_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part1.sh
   DIY_P2_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part2.sh
   CLASH_KERNEL: arm64
@@ -262,7 +273,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
         
         # 加载通用自定义脚本
-        chmod +x $GITHUB_WORKSPACE/scripts/*.sh
+        # chmod +x $GITHUB_WORKSPACE/scripts/*.sh
         # 下载 clash core
         # $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_KERNEL
         # 下载 adguard core
@@ -294,10 +305,10 @@ jobs:
       id: compile
       run: |
         cd $OPENWRT_PATH
-        mkdir -p files/etc/uci-defaults
-        cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
+        #mkdir -p files/etc/uci-defaults
+        #cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) V=sc || make -j1 V=sc || make -j1 V=sc
+        make -j$(nproc) || make –j1 V=sc 
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "TAG_DATE=$(date +"%Y.%m.%d-%H.%M")" >> $GITHUB_ENV
@@ -340,7 +351,7 @@ jobs:
         name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
         allowUpdates: true
         tag: ${{ env.TAG_DATE }}-${{ env.FIRMWARE_TAG }}
-        token: ${{ env.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
           **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
@@ -349,7 +360,7 @@ jobs:
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
           - 🚀 内核版本: ${{ env.KERNEL }}
-          - 🌐 默认地址: 10.0.0.1
+          - 🌐 默认地址: 192.168.1.1
           - 🔑 默认密码: 
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录

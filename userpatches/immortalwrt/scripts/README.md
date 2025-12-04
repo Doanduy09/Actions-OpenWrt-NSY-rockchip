@@ -1,3 +1,1 @@
-gen_image_generic.sh
-修改添加了userdata
-大小设置为2048
+这里可以覆盖immortalwrt项目中 script目录的文件
