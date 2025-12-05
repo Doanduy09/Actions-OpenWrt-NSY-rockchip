@@ -201,13 +201,13 @@ chmod +x scripts/gen_image_generic.sh
 
 # 打上 patch 目录下的补丁
 # 使用git apply 循环处理
-# echo :打 patch 目录下的补丁
-# for patch_file in patch/*.patch; do
-#     echo "Applying $patch_file using plaintext:"
-#     git apply --stat "$patch_file"
-#     git apply --check "$patch_file" || { echo "Error checking $patch_file"; continue; }
-#     git apply "$patch_file" && echo "Applied successfully" || echo "Application failed"
-# done
+echo :打 patch 目录下的补丁
+for patch_file in patch/*.patch; do
+    echo "Applying $patch_file using plaintext:"
+    git apply --stat "$patch_file"
+    git apply --check "$patch_file" || { echo "Error checking $patch_file"; continue; }
+    git apply "$patch_file" && echo "Applied successfully" || echo "Application failed"
+done
 
 
 
