@@ -1,4 +1,4 @@
-name: ImmortalWrt-g68
+name: Openwrt-build
 
 on:
   schedule:
@@ -17,22 +17,11 @@ on:
           - g68-plus
           - g18-pro
           - g16-plus
-          
-      SYSTEM:
-        description: '系统分支'
-        required: true
-        default: 'immortalwrt'
-        type: choice
-        options:
-          - openwrt
-          - immortalwrt
-          - istoreos
-          - lede
         
       BRANCH:
         description: '系统版本 (带 .y 匹配最新 tag)'
         required: true
-        default: 'v24.10.y'
+        default: 'openwrt-24.10'
         type: choice
         options:
           - main
@@ -56,17 +45,17 @@ on:
           
 env:
   BOARD: ${{ inputs.BOARD || 'g68-plus'}}
-  SYSTEM: ${{ inputs.SYSTEM || 'immortalwrt'}}
+  SYSTEM: openwrt
   REPO_BRANCH: ${{ inputs.BRANCH || 'openwrt-24.10'}}
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'immortalwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || ''}}.config
-  DIY_P1_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part1.sh
-  DIY_P2_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part2.sh
+  REPO_URL: https://github.com/openwrt/openwrt
+  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'openwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}_mtk_wifi.config
+  DIY_P1_SH: scripts/openwrt/diy-part1.sh
+  DIY_P2_SH: scripts/openwrt/diy-part2.sh
   CLASH_KERNEL: arm64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: ${{ inputs.SYSTEM || 'immortalwrt'}}-${{ inputs.BOARD || 'g68-plus'}}
+  FIRMWARE_TAG: ${{ inputs.SYSTEM || 'openwrt'}}-${{ inputs.BOARD || 'g68-plus'}}
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
@@ -161,7 +150,7 @@ jobs:
         docker rmi `docker images -q`
         docker image prune -a -f
         sudo -E systemctl daemon-reload
-        sudo -E apt-get -y purge azure-cli ghc* zulu*firefox google* dotnet* powershell openjdk* adoptopenjdk* php* mongodb* dotnet* moby* snapd* android* || true
+        sudo -E apt-get -y purge azure-cli ghc* zulu* firefox google* dotnet* powershell openjdk* adoptopenjdk* php* mongodb* dotnet* moby* snapd* android* || true
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         echo "------------------------------- 更新并安装依赖 -------------------------------"
@@ -261,8 +250,8 @@ jobs:
         sudo chmod -R +w ./
         # 复制自定义机型配置文件到源码根目录
         chmod -R 775 $GITHUB_WORKSPACE/userpatches/$SYSTEM/
-        rsync -av --progress $GITHUB_WORKSPACE/userpatches/$SYSTEM/ $OPENWRT_PATH/
-        # cp --preserve=all -r $GITHUB_WORKSPACE/userpatches/$SYSTEM/* $OPENWRT_PATH/
+        rsync -av --progress $GITHUB_WORKSPACE/userpatches/${{ env.SYSTEM }}/ $OPENWRT_PATH/
+        # cp --preserve=all -r $GITHUB_WORKSPACE/userpatches/${{ env.SYSTEM }}/* $OPENWRT_PATH/
         
         # 复制
         # [ -e files ] && mv files $OPENWRT_PATH/files
@@ -304,8 +293,10 @@ jobs:
       run: |
         cd $OPENWRT_PATH
         #mkdir -p files/etc/uci-defaults
+        # 自启动脚本
+        # cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make –j1 V=sc 
+        make -j$(nproc) || make –j1 V=sc
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "TAG_DATE=$(date +"%Y.%m.%d-%H.%M")" >> $GITHUB_ENV
