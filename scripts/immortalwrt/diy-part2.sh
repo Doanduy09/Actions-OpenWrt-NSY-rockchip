@@ -170,7 +170,7 @@ TARGET_DEVICES += bdy_g18-pro" >> target/linux/rockchip/image/armv8.mk
 
 
 # 更改 Argon 主题背景
-rm -rf feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/background/*
+# rm -rf feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/background/*
 # cp -f $GITHUB_WORKSPACE/images/bg1.jpg feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
 # mkdir -p package/luci-theme-argon/htdocs/luci-static/argon/img
 # cp -f $GITHUB_WORKSPACE/images/bg1.jpg package/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
@@ -197,7 +197,7 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package
 
 
 # 添加 gen_image_generic.sh 运行权限
-chmod +x scripts/gen_image_generic.sh
+# chmod +x scripts/gen_image_generic.sh
 
 # 打上 patch 目录下的补丁
 # 使用git apply 循环处理
@@ -208,7 +208,5 @@ for patch_file in patch/*.patch; do
     git apply --check "$patch_file" || { echo "Error checking $patch_file"; continue; }
     git apply "$patch_file" && echo "Applied successfully" || echo "Application failed"
 done
-
-
 
 

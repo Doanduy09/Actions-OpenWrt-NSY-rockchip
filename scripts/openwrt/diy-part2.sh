@@ -5,9 +5,9 @@ date_version=$(date +"%Y%m%d%H")
 echo $date_version > version
 
 # 为固件版本加上编译作者
-#author="robinZhao"
-#sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V ${date_version} by ${author}'/g" package/base-files/files/etc/openwrt_release
-#sed -i "s/OPENWRT_RELEASE.*/OPENWRT_RELEASE=\"%D %V ${date_version} by ${author}\"/g" package/base-files/files/usr/lib/os-release
+author="robinZhao"
+sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V ${date_version} by ${author}'/g" package/base-files/files/etc/openwrt_release
+sed -i "s/OPENWRT_RELEASE.*/OPENWRT_RELEASE=\"%D %V ${date_version} by ${author}\"/g" package/base-files/files/usr/lib/os-release
 
 # 修改默认IP
 #sed -i 's/192.168.1.1/10.0.0.1/g' package/base-files/files/bin/config_generate
@@ -19,8 +19,7 @@ echo $date_version > version
 #sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
 
 # 修改软件源
-# 已通过 config 修改软件源，
-# sed -i 's|https://downloads.openwrt.org|https://mirrors.pku.edu.cn/openwrt|g' package/emortal/default-settings/files/99-default-settings-chinese
+sed -i 's|https://downloads.openwrt.org|https://mirrors.pku.edu.cn/openwrt|g' package/emortal/default-settings/files/99-default-settings-chinese
 
 # 修正自动编译 openwet 时 rust 选项 导致错误
 echo 修正自动编译 openwet 时 rust 选项 导致错误
@@ -135,7 +134,7 @@ echo -e "\\ndefine Device/nsy_g68-plus
   DEVICE_DTS := rockchip/rk3568-nsy-g68-plus
   UBOOT_DEVICE_NAME := nsy-g68-plus-rk3568
   BOOT_FLOW := pine64-img
-  DEVICE_PACKAGES := kmod-switch-rtl8367b 
+  DEVICE_PACKAGES := kmod-switch-rtl8367b
 endef
 TARGET_DEVICES += nsy_g68-plus" >> target/linux/rockchip/image/armv8.mk
 
@@ -183,7 +182,7 @@ TARGET_DEVICES += bdy_g18-pro" >> target/linux/rockchip/image/armv8.mk
 
 
 # 更改 Argon 主题背景
-#rm -rf feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/background/*
+# rm -rf feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/background/*
 # cp -f $GITHUB_WORKSPACE/images/bg1.jpg feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
 # mkdir -p package/luci-theme-argon/htdocs/luci-static/argon/img
 # cp -f $GITHUB_WORKSPACE/images/bg1.jpg package/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
@@ -210,7 +209,7 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package
 
 
 # 添加 gen_image_generic.sh 运行权限
-#chmod +x scripts/gen_image_generic.sh
+# chmod +x scripts/gen_image_generic.sh
 
 # 打上 patch 目录下的补丁
 # 使用git apply 循环处理
