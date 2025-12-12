@@ -33,20 +33,22 @@ on:
       CONFIG:
         description: '配置文件'
         required: true
-        default: '_mini'
+        default: '_mini_mtk_wifi'
         type: choice
         options:
           - ''
           - _mtk_wifi
           - -docker
-          - _mini
+          - _mini_mtk_wifi
+          - _mini_open_wifi
           
 env:
   BOARD: ${{ inputs.BOARD || 'g68-plus'}}
   SYSTEM: openwrt
   REPO_BRANCH: ${{ inputs.BRANCH || 'v24.10.y'}}
   REPO_URL: https://github.com/openwrt/openwrt
-  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'openwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || '_mini'}}.config
+  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'openwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || '_mini_mtk_wifi'}}.config
+  CONFIG_SUFFIX: ${{ inputs.CONFIG || '_mini_mtk_wifi'}}
   DIY_P1_SH: scripts/openwrt/diy-part1.sh
   DIY_P2_SH: scripts/openwrt/diy-part2.sh
   CLASH_KERNEL: arm64
@@ -334,10 +336,10 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
+        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }}
         commit: ${{ github.sha }}
         allowUpdates: true
-        tag: ${{ env.TAG_DATE }}-${{ env.FIRMWARE_TAG }}
+        tag: ${{ env.TAG_DATE }}-${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |

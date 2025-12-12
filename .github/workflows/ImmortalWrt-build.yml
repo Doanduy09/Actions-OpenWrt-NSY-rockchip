@@ -33,22 +33,22 @@ on:
       CONFIG:
         description: '配置文件'
         required: true
-        default: '_mini'
+        default: '_mini_mtk_wifi'
         type: choice
         options:
           - ''
           - _mtk_wifi
           - -docker
-          - _mini
+          - _mini_mtk_wifi
           - _mini_open_wifi
           
 env:
   BOARD: ${{ inputs.BOARD || 'g68-plus'}}
   SYSTEM: immortalwrt
-  REPO_BRANCH: ${{ inputs.BRANCH || 'openwrt-24.10'}}
+  REPO_BRANCH: ${{ inputs.BRANCH || 'openwrt-24.10.y'}}
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'immortalwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || '_mini'}}.config
-  CONFIG_SUFFIX: ${{ inputs.CONFIG || '_mini'}}
+  CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'immortalwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || '_mini_mtk_wifi'}}.config
+  CONFIG_SUFFIX: ${{ inputs.CONFIG || '_mini_mtk_wifi'}}
   DIY_P1_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part1.sh
   DIY_P2_SH: scripts/${{ inputs.SYSTEM || 'immortalwrt'}}/diy-part2.sh
   CLASH_KERNEL: arm64

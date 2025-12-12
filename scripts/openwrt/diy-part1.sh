@@ -4,7 +4,7 @@
 #git clone --depth=1 https://github.com/sirpdboy/luci-app-eqosplus package/luci-app-eqosplus
 
 # 应用过滤(OAF)
-git clone https://github.com/destan19/OpenAppFilter.git -b v6.1.6  package/OpenAppFilter
+git clone https://github.com/destan19/OpenAppFilter.git  -b v6.1.6   package/OpenAppFilter
 
 # 修改 feed 软件源
 #sed -i 's|https://git.openwrt.org/feed|https://github.com/openwrt|g' feeds.conf.default
@@ -19,6 +19,9 @@ git clone https://github.com/destan19/OpenAppFilter.git -b v6.1.6  package/OpenA
 
 # kenzok8/small-package 源
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+
+
+
 
 
 
