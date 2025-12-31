@@ -13,8 +13,6 @@ on:
         type: choice
         options:
           - g68-plus
-          - g18-pro
-          - g16-plus
         
       BRANCH:
         description: '系统版本 (带 .y 匹配最新 tag)'
@@ -33,18 +31,28 @@ on:
       CONFIG:
         description: '配置文件'
         required: true
-        default: '_mini_mtk_wifi'
+        default: '_mini_open_wifi'
         type: choice
         options:
           - ''
-          - _mtk_wifi
-          - -docker
           - _mini_mtk_wifi
           - _mini_open_wifi
+
+      DSA:
+        description: 'dsa switch artifact'
+        require: true
+        default: false
+        type: boolean
       
       ALL_KMODS:
         description: 'CONFIG_ALL_KMODS'
-        require: true
+        required: true
+        default: false
+        type: boolean
+
+      TERMINAL:
+        description: '终端调试'
+        required: true
         default: false
         type: boolean
 
@@ -63,6 +71,7 @@ env:
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: ${{ inputs.SYSTEM || 'immortalwrt'}}-${{ inputs.BOARD || 'g68-plus'}}
+  SWITCH_TYPE: ${{ inputs.DSA && 'dsa' || 'swconfig'}}
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
@@ -224,6 +233,13 @@ jobs:
         mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
         prefix: ${{ env.OPENWRT_PATH }}
 
+    - name: 应用dsa
+      if: ${{ inputs.DSA }}
+      run: |
+        [ -e $GITHUB_WORKSPACE/dsa ] && cp -r $GITHUB_WORKSPACE/dsa/* $GITHUB_WORKSPACE/userpatches/$SYSTEM/
+        [ -e $GITHUB_WORKSPACE/dsa/scripts ] && cp -r $GITHUB_WORKSPACE/dsa/scripts/* $GITHUB_WORKSPACE/scripts/
+
+    
     - name: 加载自定义 feeds
       run: |
         chmod +x $DIY_P1_SH
@@ -280,6 +296,10 @@ jobs:
         cd $OPENWRT_PATH
         make defconfig
 
+    - name: ssh连接
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: ${{ inputs.TERMINAL }}
+
     - name: 下载软件包
       id: package
       run: |
@@ -323,7 +343,7 @@ jobs:
         mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
         tar -zcf Packages.tar.gz packages
         rm -rf packages feeds.buildinfo version.buildinfo
-        for file in *.gz; do mv "$file" "${{ env.FILE_DATE }}-${{ github.ref_name }}${{ env.CONFIG_SUFFIX }}-$file"; done
+        for file in *.gz; do mv "$file" "${{ env.FILE_DATE }}-${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-$file"; done
         cp $OPENWRT_PATH/build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux*/.config kernel.config
         echo "KERNEL=$(cat *.manifest | grep ^kernel | cut -d- -f2 | tr -d ' ')" >> $GITHUB_ENV
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
@@ -339,10 +359,10 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }} ${{ github.ref_name }}
+        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }} ${{ env.SWITCH_TYPE }}
         commit: ${{ github.sha }}
         allowUpdates: true
-        tag: ${{ env.TAG_DATE }}-${{ github.ref_name }}${{ env.CONFIG_SUFFIX }}-${{ env.FIRMWARE_TAG }}
+        tag: ${{ env.TAG_DATE }}-${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
