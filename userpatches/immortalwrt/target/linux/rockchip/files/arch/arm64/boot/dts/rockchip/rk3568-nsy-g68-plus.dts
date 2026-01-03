@@ -217,7 +217,7 @@
 		vin-supply = <&vcc3v3_sys>;
 	};
 
-	vcc3v3_bu: c3v3_buvcc3v3-bu {
+	vcc3v3_bu: vcc3v3-bu {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc3v3_bu";
 		regulator-always-on;
@@ -981,8 +981,11 @@
 	status = "okay";
 };
 
+/* Add #address-cells, #size-cells */
 &sfc {
 	status = "okay";
+	#address-cells = <1>;  /* One cell for the chip select */
+	#size-cells = <0>;     /* No cell for the size */
 
 	flash@0 {
 		compatible = "spi-nor";
