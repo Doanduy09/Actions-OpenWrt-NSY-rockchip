@@ -10,7 +10,7 @@ uci -q batch <<-EOF
 		commit system
 EOF
 
-[ -f /etc/opkg/distfeeds.conf ] && sed -i.bak 's_https\?://downloads.openwrt.org_https://mirrors.cloud.tencent.com/openwrt/_' /etc/opkg/distfeeds.conf
-[ -f /etc/apk/repositories.d/distfeeds.list ] && sed -i.bak 's_https\?://downloads.openwrt.org_https://mirrors.cloud.tencent.com/openwrt/_' /etc/apk/repositories.d/distfeeds.list
+[ -f /etc/opkg/distfeeds.conf ] && sed -i.bak 's_https\?://downloads.openwrt.org_https://mirrors.cloud.tencent.com/openwrt_' /etc/opkg/distfeeds.conf
+[ -f /etc/apk/repositories.d/distfeeds.list ] && sed -i.bak 's_https\?://downloads.openwrt.org_https://mirrors.cloud.tencent.com/openwrt_' /etc/apk/repositories.d/distfeeds.list
 
 exit 0
