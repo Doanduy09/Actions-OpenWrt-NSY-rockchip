@@ -739,6 +739,32 @@
 			reset-deassert-us = <100000>;
 			pinctrl-0 = <&gmac0_reset>;
 			status = "okay";
+			mdio {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				ethphy0: ethernet-phy@0 {
+					reg = <0>;
+				};
+
+				ethphy1: ethernet-phy@1 {
+					reg = <1>;
+				};
+
+				ethphy2: ethernet-phy@2 {
+					reg = <2>;
+				};
+
+				ethphy3: ethernet-phy@3 {
+					reg = <3>;
+				};
+				ethphy4: ethernet-phy@4 {
+					reg = <4>;
+				};
+				ethphy6: ethernet-phy@6 {
+					reg = <6>;
+				};
+			};
 			ports {
 					#address-cells = <1>;
 					#size-cells = <0>;
@@ -746,29 +772,35 @@
 					port@0 {
 							reg = <0>;
 							label = "lan1";
+							phy-handle = <&ethphy0>;
 					};
 
 					port@1 {
 							reg = <1>;
 							label = "lan2";
+							phy-handle = <&ethphy1>;
 					};
 
 					port@2 {
 							reg = <2>;
 							label = "lan3";
+							phy-handle = <&ethphy2>;
 					};
 
 					port@3 {
 							reg = <3>;
 							label = "lan4";
+							phy-handle = <&ethphy3>;
 					};
 					port@4 {
 							reg = <4>;
 							label = "wan";
+							phy-handle = <&ethphy4>;
 					};
 					port@6 {
 							reg = <6>;
 							label = "cpu1";
+							phy-handle = <&ethphy6>;
 					};
 					port@7 {
 							reg = <7>;
