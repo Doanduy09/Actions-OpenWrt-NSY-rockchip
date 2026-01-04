@@ -8,6 +8,9 @@ uci -q batch <<-EOF
 		add_list system.ntp.server="ntp.ntsc.ac.cn"
 		add_list system.ntp.server="cn.ntp.org.cn"
 		commit system
+		set wireless.radio0.disabled='0'
+		set wireless.radio1.disabled='0'
+		commit wireless
 EOF
 
 [ -f /etc/opkg/distfeeds.conf ] && sed -i.bak 's_https\?://downloads.openwrt.org_https://mirrors.cloud.tencent.com/openwrt_' /etc/opkg/distfeeds.conf
