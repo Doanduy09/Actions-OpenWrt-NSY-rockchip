@@ -305,6 +305,7 @@
 		realtek,extif1 = <0 0 11 1 1 1 1 1 2>;
 		//rgmii
 		realtek,extif2 = <0 0 1 1 1 1 1 1 2>;
+		//realtek,disable-leds;
 		status = "okay";
 	};
 };
@@ -778,6 +779,8 @@
 	pinctrl-0 = <&gmac1m1_miim>;
 	power-domains = <&power RK3568_PD_PIPE>;
 	phys = <&combphy1 PHY_TYPE_SGMII>;
+	tx_delay = <0x30>;
+	rx_delay = <0x20>;
 	fixed-link {
 		speed = <1000>;
 		full-duplex;
