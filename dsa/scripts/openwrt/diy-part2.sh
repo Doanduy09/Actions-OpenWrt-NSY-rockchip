@@ -110,11 +110,6 @@ done
 CONFIG_DIR="target/linux/rockchip/armv8"
 CONFIG_PATTERN="$CONFIG_DIR/config-*"
 
-for cfg in $CONFIG_PATTERN; do
-    [ -f "$cfg" ] || continue
-    echo "CONFIG_ROCKCHIP_CPUINFO=y" >> $cfg
-done
-
 # 添加机型
 
 # 增加nsy_g68-plus

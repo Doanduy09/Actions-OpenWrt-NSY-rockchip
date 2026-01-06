@@ -122,7 +122,6 @@ for cfg in $CONFIG_PATTERN; do
     else
         echo "[保持] $cfg: 配置已存在"
     fi
-    echo "CONFIG_ROCKCHIP_CPUINFO=y" >> $cfg
 done
 
 # 添加机型
