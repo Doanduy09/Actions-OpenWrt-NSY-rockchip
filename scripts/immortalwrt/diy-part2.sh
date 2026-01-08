@@ -4,10 +4,6 @@
 date_version=$(date +"%Y%m%d%H")
 echo $date_version > version
 
-# 为固件版本加上编译作者
-author="robinZhao"
-sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V ${date_version} by ${author}'/g" package/base-files/files/etc/openwrt_release
-sed -i "s/OPENWRT_RELEASE.*/OPENWRT_RELEASE=\"%D %V ${date_version} by ${author}\"/g" package/base-files/files/usr/lib/os-release
 
 # 修改默认IP
 #sed -i 's/192.168.1.1/10.0.0.1/g' package/base-files/files/bin/config_generate
@@ -100,16 +96,7 @@ CONFIG_PATTERN="$CONFIG_DIR/config-*"
 
 for cfg in $CONFIG_PATTERN; do
     [ -f "$cfg" ] || continue
-    
-    if grep -q '^# CONFIG_SWCONFIG is not set$' "$cfg"; then
-        sed -i 's/^# CONFIG_SWCONFIG is not set$/CONFIG_SWCONFIG=y/' "$cfg"
-        echo "[替换] $cfg: 已修改禁用配置"
-    elif ! grep -q '^CONFIG_SWCONFIG=' "$cfg"; then
-        echo "CONFIG_SWCONFIG=y" >> "$cfg"
-        echo "[追加] $cfg: 已添加新配置"
-    else
-        echo "[保持] $cfg: 配置已存在"
-    fi
+    #sed -i 's/^# CONFIG_SWCONFIG is not set$/CONFIG_SWCONFIG=y/' "$cfg"
 done
 
 # 添加机型
@@ -194,9 +181,6 @@ TARGET_DEVICES += bdy_g18-pro" >> target/linux/rockchip/image/armv8.mk
 # samba解除root限制
 # sed -i 's/invalid users = root/#&/g' feeds/packages/net/samba4/files/smb.conf.template
 
-
-# 最大连接数修改为65535
-sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package/base-files/files/etc/sysctl.conf
 
 
 # 添加 gen_image_generic.sh 运行权限

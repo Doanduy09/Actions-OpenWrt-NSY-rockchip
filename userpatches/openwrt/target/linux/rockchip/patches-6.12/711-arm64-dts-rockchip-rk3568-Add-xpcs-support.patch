@@ -10,11 +10,9 @@ Signed-off-by: David Wu <david.wu@rock-chips.com>
  arch/arm64/boot/dts/rockchip/rk3568.dtsi | 32 +++++++++++++++++++++---
  2 files changed, 29 insertions(+), 4 deletions(-)
 
-Index: linux-6.12.62/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-===================================================================
 --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -269,6 +269,13 @@
+@@ -263,6 +263,13 @@
  		arm,no-tick-in-suspend;
  	};
  
@@ -28,7 +26,7 @@ Index: linux-6.12.62/arch/arm64/boot/dts/rockchip/rk356x.dtsi
  	xin24m: xin24m {
  		compatible = "fixed-clock";
  		clock-frequency = <24000000>;
-@@ -428,6 +435,12 @@
+@@ -422,6 +429,12 @@
  		status = "disabled";
  	};
  
@@ -41,7 +39,7 @@ Index: linux-6.12.62/arch/arm64/boot/dts/rockchip/rk356x.dtsi
  	pmugrf: syscon@fdc20000 {
  		compatible = "rockchip,rk3568-pmugrf", "syscon", "simple-mfd";
  		reg = <0x0 0xfdc20000 0x0 0x10000>;
-@@ -727,11 +740,13 @@
+@@ -721,11 +734,13 @@
  		clocks = <&cru SCLK_GMAC1>, <&cru SCLK_GMAC1_RX_TX>,
  			 <&cru SCLK_GMAC1_RX_TX>, <&cru CLK_MAC1_REFOUT>,
  			 <&cru ACLK_GMAC1>, <&cru PCLK_GMAC1>,
@@ -57,8 +55,6 @@ Index: linux-6.12.62/arch/arm64/boot/dts/rockchip/rk356x.dtsi
  		resets = <&cru SRST_A_GMAC1>;
  		reset-names = "stmmaceth";
  		rockchip,grf = <&grf>;
-Index: linux-6.12.62/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-===================================================================
 --- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
 @@ -8,6 +8,13 @@

@@ -1,7 +1,5 @@
-Index: linux-6.12.62/drivers/net/dsa/realtek/rtl8365mb.c
-===================================================================
---- linux-6.12.62.orig/drivers/net/dsa/realtek/rtl8365mb.c
-+++ linux-6.12.62/drivers/net/dsa/realtek/rtl8365mb.c
+--- a/drivers/net/dsa/realtek/rtl8365mb.c
++++ b/drivers/net/dsa/realtek/rtl8365mb.c
 @@ -314,6 +314,116 @@
   */
  #define RTL8365MB_STATS_INTERVAL_JIFFIES	(3 * HZ)
@@ -861,10 +859,8 @@ Index: linux-6.12.62/drivers/net/dsa/realtek/rtl8365mb.c
  };
  
  static const struct realtek_ops rtl8365mb_ops = {
-Index: linux-6.12.62/include/linux/bitfield.h
-===================================================================
---- linux-6.12.62.orig/include/linux/bitfield.h
-+++ linux-6.12.62/include/linux/bitfield.h
+--- a/include/linux/bitfield.h
++++ b/include/linux/bitfield.h
 @@ -90,6 +90,18 @@
  	})
  

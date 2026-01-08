@@ -21,10 +21,8 @@ Signed-off-by: Schneider Azima <Schneider-Azima12@protonmail.com>
  drivers/net/dsa/realtek/rtl8365mb.c | 500 +++++++++++++++++++++++++++-
  1 file changed, 495 insertions(+), 5 deletions(-)
 
-Index: linux-6.12.62/drivers/net/dsa/realtek/rtl8365mb.c
-===================================================================
---- linux-6.12.62.orig/drivers/net/dsa/realtek/rtl8365mb.c
-+++ linux-6.12.62/drivers/net/dsa/realtek/rtl8365mb.c
+--- a/drivers/net/dsa/realtek/rtl8365mb.c
++++ b/drivers/net/dsa/realtek/rtl8365mb.c
 @@ -118,11 +118,14 @@
  
  #define RTL8365MB_CHIP_VER_REG		0x1301

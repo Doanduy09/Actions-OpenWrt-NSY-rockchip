@@ -15,8 +15,6 @@ Change-Id: I6624b6af2ede3c2fca61c0f753a08a33ce69a6d2
  2 files changed, 8225 insertions(+), 3 deletions(-)
  create mode 100644 drivers/phy/phy-rockchip-snps-pcie3.fw
 
-Index: linux-6.12.62/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
-===================================================================
 --- a/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
 +++ b/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
 @@ -21,6 +21,7 @@

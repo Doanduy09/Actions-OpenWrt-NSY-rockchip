@@ -1,5 +1,3 @@
-Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.c
-===================================================================
 --- /dev/null
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.c
 @@ -0,0 +1,1609 @@
@@ -1612,8 +1610,6 @@ Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.c
 +
 +	return 0;
 +}
-Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.h
-===================================================================
 --- /dev/null
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.h
 @@ -0,0 +1,20 @@
@@ -1637,8 +1633,6 @@ Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk-tool.h
 +
 +#endif /* __DWMAC_RK_TOOL_H__ */
 +
-Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/Makefile
-===================================================================
 --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
 +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
 @@ -20,7 +20,7 @@ obj-$(CONFIG_DWMAC_LPC18XX)	+= dwmac-lpc
@@ -1650,8 +1644,6 @@ Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/Makefile
  obj-$(CONFIG_DWMAC_RZN1)	+= dwmac-rzn1.o
  obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
  obj-$(CONFIG_DWMAC_STARFIVE)	+= dwmac-starfive.o
-Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-===================================================================
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 @@ -23,6 +23,7 @@

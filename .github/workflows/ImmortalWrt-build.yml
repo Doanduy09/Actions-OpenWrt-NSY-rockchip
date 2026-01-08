@@ -237,8 +237,6 @@ jobs:
       if: ${{ inputs.DSA }}
       run: |
         [ -e $GITHUB_WORKSPACE/dsa ] && cp -r $GITHUB_WORKSPACE/dsa/* $GITHUB_WORKSPACE/userpatches/$SYSTEM/
-        [ -e $GITHUB_WORKSPACE/dsa/scripts ] && cp -r $GITHUB_WORKSPACE/dsa/scripts/* $GITHUB_WORKSPACE/scripts/
-
     
     - name: 加载自定义 feeds
       run: |

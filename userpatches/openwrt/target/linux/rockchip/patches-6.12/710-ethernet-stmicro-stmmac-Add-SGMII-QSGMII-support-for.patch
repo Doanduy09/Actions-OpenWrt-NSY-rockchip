@@ -13,8 +13,6 @@ Signed-off-by: David Wu <david.wu@rock-chips.com>
  .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 228 +++++++++++++++++-
  1 file changed, 217 insertions(+), 11 deletions(-)
 
-Index: linux-6.12.62/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-===================================================================
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 @@ -11,6 +11,7 @@

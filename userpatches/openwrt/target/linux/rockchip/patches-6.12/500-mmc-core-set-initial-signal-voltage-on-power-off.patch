@@ -22,8 +22,6 @@ Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
  drivers/mmc/core/core.c | 2 ++
  1 file changed, 2 insertions(+)
 
-Index: linux-6.12.62/drivers/mmc/core/core.c
-===================================================================
 --- a/drivers/mmc/core/core.c
 +++ b/drivers/mmc/core/core.c
 @@ -1370,6 +1370,8 @@ void mmc_power_off(struct mmc_host *host

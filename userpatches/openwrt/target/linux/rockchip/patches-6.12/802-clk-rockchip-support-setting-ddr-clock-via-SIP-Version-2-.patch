@@ -16,8 +16,6 @@ Signed-off-by: hmz007 <hmz007@gmail.com>
  drivers/clk/rockchip/clk.h        |   1 +
  3 files changed, 161 insertions(+), 1 deletion(-)
 
-Index: linux-6.12.62/drivers/clk/rockchip/clk-ddr.c
-===================================================================
 --- a/drivers/clk/rockchip/clk-ddr.c
 +++ b/drivers/clk/rockchip/clk-ddr.c
 @@ -87,6 +87,133 @@ static const struct clk_ops rockchip_ddr
@@ -164,8 +162,6 @@ Index: linux-6.12.62/drivers/clk/rockchip/clk-ddr.c
  	default:
  		pr_err("%s: unsupported ddrclk type %d\n", __func__, ddr_flag);
  		kfree(ddrclk);
-Index: linux-6.12.62/drivers/clk/rockchip/clk-rk3328.c
-===================================================================
 --- a/drivers/clk/rockchip/clk-rk3328.c
 +++ b/drivers/clk/rockchip/clk-rk3328.c
 @@ -315,9 +315,10 @@ static struct rockchip_clk_branch rk3328
@@ -182,8 +178,6 @@ Index: linux-6.12.62/drivers/clk/rockchip/clk-rk3328.c
  	GATE(0, "clk_ddrmsch", "clk_ddr", CLK_IGNORE_UNUSED,
  			RK3328_CLKGATE_CON(18), 6, GFLAGS),
  	GATE(0, "clk_ddrupctl", "clk_ddr", CLK_IGNORE_UNUSED,
-Index: linux-6.12.62/drivers/clk/rockchip/clk.h
-===================================================================
 --- a/drivers/clk/rockchip/clk.h
 +++ b/drivers/clk/rockchip/clk.h
 @@ -593,7 +593,8 @@ struct clk *rockchip_clk_register_mmc(co
@@ -196,8 +190,6 @@ Index: linux-6.12.62/drivers/clk/rockchip/clk.h
  
  struct clk *rockchip_clk_register_ddrclk(const char *name, int flags,
  					 const char *const *parent_names,
-Index: linux-6.12.62/include/soc/rockchip/rockchip_sip.h
-===================================================================
 --- a/include/soc/rockchip/rockchip_sip.h
 +++ b/include/soc/rockchip/rockchip_sip.h
 @@ -19,5 +19,16 @@

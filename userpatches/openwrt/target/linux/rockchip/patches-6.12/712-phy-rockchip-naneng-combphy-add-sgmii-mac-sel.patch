@@ -1,5 +1,3 @@
-Index: linux-6.12.62/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
-===================================================================
 --- a/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
 +++ b/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
 @@ -181,6 +181,7 @@ struct rockchip_combphy_grfcfg {

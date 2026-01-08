@@ -1,5 +1,3 @@
-Index: linux-6.12.62/net/wireless/Kconfig
-===================================================================
 --- a/net/wireless/Kconfig
 +++ b/net/wireless/Kconfig
 @@ -1,6 +1,6 @@
