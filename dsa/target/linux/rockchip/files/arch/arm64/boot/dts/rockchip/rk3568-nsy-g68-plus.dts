@@ -216,7 +216,7 @@
 		recovery-key {
 			label = "reset";
 			linux,code = <KEY_RESTART>;
-			press-threshold-microvolt = <1500000>;
+			press-threshold-microvolt = <1000>;
 		};
 	};
 
