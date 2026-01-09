@@ -29,10 +29,10 @@ on:
       CONFIG:
         description: '配置文件'
         required: true
-        default: '_mini_open_wifi'
+        default: '_all_in'
         type: choice
         options:
-          - ''
+          - '_all_in'
           - _mini_mtk_wifi
           - _mini_open_wifi
 
@@ -167,7 +167,7 @@ jobs:
         gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev \
         python3-setuptools rsync swig unzip zlib1g-dev file wget \
         libpython3-dev python3 python3-pip python3-cryptography python3-docutils \
-        python3-ply python3-pyelftools python3-requests 
+        python3-ply python3-pyelftools python3-requests  clang llvm
 
         echo "------------------------------- 设置工作目录及时区 -------------------------------"
         sudo timedatectl set-timezone "$TZ"
@@ -233,7 +233,7 @@ jobs:
       with:
         # 检查是否缓存 ccache
         ccache: false
-        mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
+        mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ inputs.CONFIG }}
         prefix: ${{ env.OPENWRT_PATH }}
 
     - name: 应用dsa
@@ -323,6 +323,24 @@ jobs:
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "TAG_DATE=$(date +"%Y.%m.%d-%H.%M")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+    
+    - name: make-image
+      if: ${{ inputs.CONFIG == '_all_in' }}
+      id: mkimage
+      run: |
+        cd $OPENWRT_PATH/build_dir/target-aarch64_generic_musl/openwrt-imagebuilder*
+        cp -rp $OPENWRT_PATH/build_dir/target-aarch64_generic_musl/root-rockchip/etc/apk/repositories.d/distfeeds.list ./repositories
+        cp -rp $GITHUB_WORKSPACE/image-builder/* ./
+        chmod +x *.sh
+        ./make_no_wifi_dsa.sh
+        ./make_no_wifi_sw.sh
+        ./make_wifi_op_sw.sh
+        ./make_wifi_op_dsa.sh
+        ./make_wifi_mt_sw.sh
+        ./make_wifi_mt_dsa.sh
+        cd bin/targets/rockchip/armv8/
+        for file in *-sysupgrade.img.gz; do [ -e "$file" ] || continue; mv "$file" "$OPENWRT_PATH/bin/${{ env.FILE_DATE }}-$file"; done
+
 
     - name: 检查空间使用情况
       if: (!cancelled())
