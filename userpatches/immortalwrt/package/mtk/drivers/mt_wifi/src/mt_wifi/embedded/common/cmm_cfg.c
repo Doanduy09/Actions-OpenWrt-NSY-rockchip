@@ -907,7 +907,7 @@ INT RtmpIoctl_rt_ioctl_giwname(
 					return NDIS_STATUS_FAILURE;
 				}
 			} else {
-				strlcpy(pData, "RTWIFI SoftAP", strlen("RTWIFI SoftAP") + 1);
+				strncpy(pData, "RTWIFI SoftAP", strlen("RTWIFI SoftAP") + 1);
 			}
 		}
 	}
