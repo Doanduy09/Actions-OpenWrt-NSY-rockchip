@@ -18,7 +18,8 @@
 #include <linux/of_platform.h>
 #include <linux/delay.h>
 #include <linux/skbuff.h>
-#include <linux/rtl8367.h>
+#include <rtl8367.h>
+#include <linux/version.h>
 
 #include "rtl8366_smi.h"
 
