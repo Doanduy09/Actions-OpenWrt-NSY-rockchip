@@ -17,7 +17,7 @@ on:
       BRANCH:
         description: '系统版本 (带 .y 匹配最新 tag)'
         required: true
-        default: 'v24.10.y'
+        default: 'v25.12.y'
         type: choice
         options:
           - main
@@ -38,7 +38,7 @@ on:
 
       DSA:
         description: 'Enable Dsa Switch Artifact'
-        require: true
+        required: true
         default: false
         type: boolean
       
@@ -58,7 +58,7 @@ on:
 env:
   BOARD: ${{ inputs.BOARD || 'g68-plus'}}
   SYSTEM: openwrt
-  REPO_BRANCH: ${{ inputs.BRANCH || 'v24.10.y'}}
+  REPO_BRANCH: ${{ inputs.BRANCH || 'v25.12.y'}}
   REPO_URL: https://github.com/openwrt/openwrt
   CONFIG_FILE: userpatches/${{ inputs.SYSTEM || 'openwrt'}}/defconfig/${{ inputs.BOARD || 'g68-plus'}}${{ inputs.CONFIG || '_mini_mtk_wifi'}}.config
   CONFIG_SUFFIX: ${{ inputs.CONFIG || '_mini_mtk_wifi'}}
@@ -69,7 +69,7 @@ env:
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: ${{ inputs.SYSTEM || 'openwrt'}}-${{ inputs.BOARD || 'g68-plus'}}
-  SWITCH_TYPE: ${{ inputs.DSA && 'dsa' || 'swconfig'}}
+  SWITCH_TYPE: ${{ inputs.DSA && '-dsa' || '-swconfig' }}
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
@@ -151,9 +151,18 @@ jobs:
           echo "用户选择了固定版本: ${REPO_BRANCH}"
         fi
 
+        if ${{ inputs.CONFIG == '_all_in'}}; then
+          SWITCH_TYPE=''
+          echo "SWITCH_TYPE=${SWITCH_TYPE}" >> $GITHUB_ENV
+        fi
+
+
         # 将最终确定的版本号输出到 GITHUB_ENV，供后续步骤使用
         echo "最终选择的版本是: ${REPO_BRANCH}"
         echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
+
+        echo SWITCH_TYPE=${SWITCH_TYPE}
+        echo dsa=${{ inputs.CONFIG != '_all_in' && inputs.DSA }}
 
     - name: 初始化环境
       env:
@@ -237,7 +246,7 @@ jobs:
         prefix: ${{ env.OPENWRT_PATH }}
 
     - name: 应用dsa
-      if: ${{ inputs.DSA }}
+      if: ${{ inputs.CONFIG != '_all_in' && inputs.DSA }}
       run: |
         [ -e $GITHUB_WORKSPACE/dsa ] && cp -r $GITHUB_WORKSPACE/dsa/* $GITHUB_WORKSPACE/userpatches/$SYSTEM/
     
@@ -287,7 +296,7 @@ jobs:
     
     - name: 设置CONFIG_ALL_KMODS
       id: set-all-kmods
-      if: ${{ inputs.ALL_KMODS }}
+      if: ${{ inputs.CONFIG != '_all_in' && inputs.ALL_KMODS }}
       run: |
           cat userpatches/${SYSTEM}/defconfig/packages.config >> $OPENWRT_PATH/.config
 
@@ -358,14 +367,14 @@ jobs:
       run: |
         cd $OPENWRT_PATH/bin/targets/rockchip/armv8/
         cat sha256sums
-        for file in *.gz *.zst; do [ -e "$file" ] || continue; mv "$file" "$OPENWRT_PATH/bin/${{ env.FILE_DATE }}-${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-$file"; done
+        for file in *.gz *.zst; do [ -e "$file" ] || continue; mv "$file" "$OPENWRT_PATH/bin/${{ env.FILE_DATE }}${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-$file"; done
         mv sha256sums *.manifest *.json *.buildinfo $OPENWRT_PATH/bin/
         cd $OPENWRT_PATH/bin/
         cp ../.config build.config
         cp $OPENWRT_PATH/build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux*/.config kernel.config
         mkdir dist
         mv packages targets dist/
-        tar -zcf ${{ env.FILE_DATE }}-${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-Packages.tar.gz dist --remove-files
+        tar -zcf ${{ env.FILE_DATE }}${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-Packages.tar.gz dist --remove-files
         echo "KERNEL=$(cat *.manifest | grep ^kernel | cut -d- -f2 | tr -d ' ')" >> $GITHUB_ENV
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
 
@@ -380,10 +389,10 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }} ${{ env.SWITCH_TYPE }}
+        name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}${{ env.CONFIG_SUFFIX }}${{ env.SWITCH_TYPE }}
         commit: ${{ github.sha }}
         allowUpdates: true
-        tag: ${{ env.TAG_DATE }}-${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-${{ env.FIRMWARE_TAG }}
+        tag: ${{ env.TAG_DATE }}${{ env.SWITCH_TYPE }}${{ env.CONFIG_SUFFIX }}-${{ env.FIRMWARE_TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
