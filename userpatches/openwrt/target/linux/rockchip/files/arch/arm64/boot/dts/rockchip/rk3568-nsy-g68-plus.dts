@@ -151,6 +151,8 @@
 
 	vdd_cpu: vdd-cpu {
 		compatible = "pwm-regulator";
+		rockchip,pwm_id = <0>;
+		rockchip,pwm_voltage = <900000>;
 		pwms = <&pwm0 0 25000 1>;
 		regulator-name = "vdd_cpu";
 		regulator-min-microvolt = <800000>;
@@ -166,6 +168,8 @@
 
 	vdd_logic: vdd-logic {
 		compatible = "pwm-regulator";
+		rockchip,pwm_id = <1>;
+		rockchip,pwm_voltage = <900000>;
 		pwms = <&pwm1 0 5000 1>;
 		regulator-name = "vdd_logic";
 		regulator-min-microvolt = <1200000>;
@@ -667,7 +671,11 @@
 	no-sd;
 	supports-emmc;
 	non-removable;
+	cap-mmc-highspeed;
+	mmc-ddr-1_8v;
 	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	mmc-hs400-enhanced-strobe;
 	pinctrl-names = "default";
 	pinctrl-0 = <&emmc_bus8 &emmc_clk &emmc_cmd &emmc_datastrobe>;
 	full-pwr-cycle-in-suspend;
