@@ -259,6 +259,20 @@
 		rockchip,sleep-mode-config = <0x4e4>;
 		rockchip,wakeup-config = <0x2001>;
 	};
+
+	external-gmac0-clock {
+		#clock-cells = <0x00>;
+		clock-frequency = <125000000>;
+		clock-output-names = "gmac0_clkin";
+		compatible = "fixed-clock";
+	};
+
+	external-gmac1-clock {
+		#clock-cells = <0x00>;
+		clock-frequency = <125000000>;
+		clock-output-names = "gmac1_clkin";
+		compatible = "fixed-clock";
+	};
 };
 
 &i2c0 {
@@ -342,6 +356,7 @@
 		reset-gpios = <&gpio0 RK_PC3 GPIO_ACTIVE_HIGH>;
 		num-lanes = <1>; /*可能不生效,但是拆分需要打补丁,如果是吧,打补丁*/
 		pinctrl-0 = <&pcie30x1_reset_h>;
+		num-viewport = <0x08>;
 		status = "okay";
 };
 
@@ -353,6 +368,7 @@
 		status = "okay";
 		num-lanes = <2>;
 		pinctrl-0 = <&pcie30x2_reset_h>;
+		num-viewport = <0x08>;
 };
 
 &pcie30phy {
@@ -370,6 +386,7 @@
 		num-lanes = <1>;
 		//for kernel.dts
 		rockchip,perst-inactive-ms = <500>;
+		num-viewport = <0x08>;
 		status = "okay";
 };
 
@@ -507,16 +524,16 @@
 	status = "okay";
 };
 
-//&xpcs {
-//	status = "okay";
-//};
+&xpcs {
+	status = "okay";
+};
 
 &gmac1 {
 	status = "okay";
 	phy-mode = "sgmii";
-	clock_in_out = "input";
+	//clock_in_out = "input";
 	rockchip,pipegrf = <&pipegrf>;
-	//rockchip,xpcs = <&xpcs>;
+	rockchip,xpcs = <&xpcs>;
 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>;
 	assigned-clock-parents = <&gmac1_xpcsclk>;
 	pinctrl-names = "default";
@@ -530,6 +547,19 @@
 		full-duplex;
 		pause;
 	};
+};
+
+&usb2phy0 {
+	status = "okay";
+};
+
+&usb2phy0_host {
+	phy-supply = <&vcc5v0_host>;
+	status = "okay";
+};
+
+&usb2phy0_otg {
+	status = "disabled";
 };
 
 &usb_host0_ehci {
@@ -567,6 +597,20 @@
 	quirk-skip-phy-init;
 };
 
+&usb2phy1 {
+	status = "disabled";
+};
+
+&usb2phy1_host {
+	//phy-supply = <&vcc5v0_host>;
+	status = "disabled";
+};
+
+&usb2phy1_otg {
+	//phy-supply = <&vcc5v0_host>;
+	status = "disabled";
+};
+
 &usb_host1_ehci {
 	status = "disabled";
 };
@@ -584,34 +628,6 @@
 	snps,dis_rxdet_inp3_quirk;
 	snps,xhci-trb-ent-quirk;
 	snps,parkmode-disable-ss-quirk;
-	status = "disabled";
-};
-
-&usb2phy0 {
-	status = "okay";
-};
-
-&usb2phy0_host {
-	phy-supply = <&vcc5v0_host>;
-	status = "okay";
-};
-
-&usb2phy0_otg {
-	//phy-supply = <&vcc5v0_otg>;
-	status = "disabled";
-};
-
-&usb2phy1 {
-	status = "disabled";
-};
-
-&usb2phy1_host {
-	phy-supply = <&vcc5v0_host>;
-	status = "disabled";
-};
-
-&usb2phy1_otg {
-	phy-supply = <&vcc5v0_host>;
 	status = "disabled";
 };
 
@@ -714,7 +730,7 @@
 	vqmmc-supply = <&vccio_sd>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-	status = "okay";
+	status = "disabled";
 };
 
 &combphy0 {
