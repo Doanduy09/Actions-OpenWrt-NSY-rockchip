@@ -4,6 +4,7 @@ kmod-dsa kmod-phy-realtek kmod-dsa-realtek kmod-dsa-rtl8365mb \
 iwinfo wireless-tools wireless-regdb \
 wpad-openssl luci-app-mtk  luci-i18n-mtk-zh-cn datconf datconf-lua kmod-mt_wifi wifi-dats wifi-dats wifi-profile \
 kmod-button-hotplug kmod-leds-gpio \
+kmod-fs-vfat kmod-fs-ntfs3 kmod-fs-ext4 kmod-fs-exfat \
 luci luci-ssl luci-compat luci-i18n-base-zh-cn \
 luci-i18n-firewall-zh-cn luci-app-samba4 luci-i18n-samba4-zh-cn luci-app-upnp \
 luci-i18n-upnp-zh-cn luci-app-https-dns-proxy luci-i18n-https-dns-proxy-zh-cn \
