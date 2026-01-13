@@ -554,30 +554,12 @@
 };
 
 &usb2phy0_host {
-	phy-supply = <&vcc5v0_host>;
+	//phy-supply = <&vcc5v0_host>;
 	status = "okay";
 };
 
 &usb2phy0_otg {
-	status = "disabled";
-};
-
-&usb_host0_ehci {
 	status = "okay";
-};
-
-&usb_host0_ohci {
-	status = "okay";
-	snps,dis_enblslpm_quirk;
-	snps,dis-u1-entry-quirk;
-	snps,dis-u2-entry-quirk;
-	snps,dis-u2-freeclk-exists-quirk;
-	snps,dis-del-phy-power-chg-quirk;
-	snps,dis-tx-ipgap-linecheck-quirk;
-	snps,dis_rxdet_inp3_quirk;
-	snps,xhci-trb-ent-quirk;
-	snps,parkmode-disable-ss-quirk;
-	quirk-skip-phy-init;
 };
 
 &usb_host0_xhci {
@@ -588,35 +570,15 @@
 	snps,dis_enblslpm_quirk;
 	snps,dis-u1-entry-quirk;
 	snps,dis-u2-entry-quirk;
+	snps,dis_u2_susphy_quirk;
+	snps,dis_u3_susphy_quirk;
 	snps,dis-u2-freeclk-exists-quirk;
 	snps,dis-del-phy-power-chg-quirk;
 	snps,dis-tx-ipgap-linecheck-quirk;
 	snps,dis_rxdet_inp3_quirk;
-	snps,xhci-trb-ent-quirk;
+	snps,parkmode-disable-hs-quirk;
 	snps,parkmode-disable-ss-quirk;
 	quirk-skip-phy-init;
-};
-
-&usb2phy1 {
-	status = "disabled";
-};
-
-&usb2phy1_host {
-	//phy-supply = <&vcc5v0_host>;
-	status = "disabled";
-};
-
-&usb2phy1_otg {
-	//phy-supply = <&vcc5v0_host>;
-	status = "disabled";
-};
-
-&usb_host1_ehci {
-	status = "disabled";
-};
-
-&usb_host1_ohci {
-	status = "disabled";
 };
 
 &usb_host1_xhci {
@@ -626,9 +588,9 @@
 	snps,dis-del-phy-power-chg-quirk;
 	snps,dis-tx-ipgap-linecheck-quirk;
 	snps,dis_rxdet_inp3_quirk;
-	snps,xhci-trb-ent-quirk;
+	snps,parkmode-disable-hs-quirk;
 	snps,parkmode-disable-ss-quirk;
-	status = "disabled";
+	status = "okay";
 };
 
 &sata2 {
