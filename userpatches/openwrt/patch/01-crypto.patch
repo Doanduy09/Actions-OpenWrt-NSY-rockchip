@@ -1,0 +1,58 @@
+diff --git a/package/kernel/linux/modules/crypto.mk b/package/kernel/linux/modules/crypto.mk
+index 3f6b20fbbb..7524c3fa59 100644
+--- a/package/kernel/linux/modules/crypto.mk
++++ b/package/kernel/linux/modules/crypto.mk
+@@ -549,6 +549,53 @@ endef
+ 
+ $(eval $(call KernelPackage,crypto-hw-eip93))
+ 
++define KernelPackage/crypto-hw-rk
++  TITLE:=Rockchip crypto module
++  DEPENDS:=@TARGET_rockchip \
++        +kmod-crypto-ecb \
++        +kmod-crypto-cbc \
++        +kmod-crypto-authenc \
++        +kmod-crypto-hash \
++        +kmod-crypto-des \
++        +kmod-crypto-md5 \
++        +kmod-crypto-sha1 \
++        +kmod-crypto-sha512 \
++        +kmod-crypto-sha256 \
++        +kmod-crypto-engine
++  KCONFIG:= \
++        CONFIG_CRYPTO_HW=y \
++        CONFIG_CRYPTO_DEV_ROCKCHIP \
++        CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG=y \
++  FILES:=$(LINUX_DIR)/drivers/crypto/rockchip/rk_crypto.ko
++  AUTOLOAD:=$(call AutoLoad,09,rk_crypto)
++  $(call AddDepends/crypto)
++endef
++
++define KernelPackage/crypto-hw-rk/description
++Kernel module to enable Rockchip Crypto engine
++endef
++
++$(eval $(call KernelPackage,crypto-hw-rk))
++
++define KernelPackage/crypto-hw-rk2
++  TITLE:=Rockchip crypto2 module
++  DEPENDS:=@TARGET_rockchip \
++        +kmod-crypto-hw-rk
++  KCONFIG:= \
++        CONFIG_CRYPTO_HW=y \
++        CONFIG_CRYPTO_DEV_ROCKCHIP2=m \
++        CONFIG_CRYPTO_DEV_ROCKCHIP2_DEBUG=y \
++  FILES:=$(LINUX_DIR)/drivers/crypto/rockchip/rk_crypto2.ko
++  AUTOLOAD:=$(call AutoLoad,09,rk_crypto2)
++  $(call AddDepends/crypto)
++endef
++
++define KernelPackage/crypto-hw-rk2/description
++Kernel module to enable Rockchip Crypto2 engine
++endef
++
++$(eval $(call KernelPackage,crypto-hw-rk2))
++
+ define KernelPackage/crypto-kpp
+   TITLE:=Key-agreement Protocol Primitives
+   KCONFIG:=CONFIG_CRYPTO_KPP
