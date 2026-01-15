@@ -92,7 +92,7 @@ jobs:
 
     - name: 下载sdk
       working-directory: ${{ env.WORKDIR }}/workdir
-      id: clone
+      id: download
       run: |
         wget  ${{ env.SDK_URL }}
         tar -I zstd -xvf *.tar.zst
@@ -102,7 +102,7 @@ jobs:
 
 
     - name: 编译packages
-      id: variable
+      id: compile
       run: |
         cd ${{ env.SDK_PATH }}
         chmod +x ${GITHUB_WORKSPACE}/packages/compile_packages.sh
@@ -121,7 +121,7 @@ jobs:
       if: ${{ inputs.TERMINAL }}
 
     - name: 上传发布固件
-      if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
+      if: steps.compile.outputs.status == 'success'
       uses: ncipollo/release-action@v1
       with:
         name: R${{ env.DATE }} Packages 
