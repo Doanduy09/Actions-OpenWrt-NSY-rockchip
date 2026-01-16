@@ -474,6 +474,7 @@
 							fixed-link {
 								speed = <1000>;
 								full-duplex;
+								pause;
 							};
 					};
 					port@7 {
@@ -485,6 +486,7 @@
 							fixed-link {
 								speed = <1000>;
 								full-duplex;
+								pause;
 							};
 					};
 
@@ -503,8 +505,8 @@
 	assigned-clocks = <&cru SCLK_GMAC0_RX_TX &cru SCLK_GMAC0>;
 	assigned-clock-parents = <&cru SCLK_GMAC0_RGMII_SPEED &cru CLK_MAC0_2TOP>;
 	assigned-clock-rates = <0x0 125000000>;
-	tx_delay = <0x3c>;
-	rx_delay = <0x2f>;
+	tx_delay = <0x28>;
+	rx_delay = <0x37>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&gmac0_miim &gmac0_tx_bus2 &gmac0_rx_bus2 &gmac0_rgmii_clk &gmac0_rgmii_bus /*&gmac0_reset*/>;
 	fixed-link {
@@ -534,7 +536,7 @@
 &gmac1 {
 	status = "okay";
 	phy-mode = "sgmii";
-	//clock_in_out = "input";
+	clock_in_out = "input";
 	rockchip,pipegrf = <&pipegrf>;
 	rockchip,xpcs = <&xpcs>;
 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>;
@@ -543,8 +545,6 @@
 	pinctrl-0 = <&gmac1m1_miim>;
 	power-domains = <&power RK3568_PD_PIPE>;
 	phys = <&combphy1 PHY_TYPE_SGMII>;
-	tx_delay = <0x30>;
-	rx_delay = <0x20>;
 	fixed-link {
 		speed = <1000>;
 		full-duplex;
