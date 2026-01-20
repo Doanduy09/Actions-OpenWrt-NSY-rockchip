@@ -15,9 +15,11 @@ on:
           
 env:
 
-  SDK_URL: https://github.com/robinZhao/Actions-OpenWrt-NSY/releases/download/2026.01.15-18.40_all_in-openwrt-g68-plus/2026.01.15_all_in-openwrt-sdk-25.12.0-rc2-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64.tar.zst
+  SDK_URL: https://github.com/robinZhao/Actions-OpenWrt-NSY/releases/download/2026.01.16-23.20_all_in-openwrt-g68-plus/2026.01.16_all_in-openwrt-sdk-25.12.0-rc2-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64.tar.zst
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  SIGN_KEY: ${{ secrets.PRIVATE_SIGN_KEY }}
+  SIGN_PUB_KEY: ${{ secrets.PUBLIC_SIGN_KEY }}
 
 jobs:
   Build:
@@ -94,12 +96,17 @@ jobs:
       working-directory: ${{ env.WORKDIR }}/workdir
       id: download
       run: |
-        wget  ${{ env.SDK_URL }}
-        tar -I zstd -xvf *.tar.zst
+        wget -q  ${{ env.SDK_URL }}
+        tar -I zstd -xf *.tar.zst
         mv openwrt-sdk* sdk
         cd sdk
+        echo -e "$SIGN_KEY" >> private-key.pem
+        echo -e "$SIGN_PUB_KEY" >> public-key.pem
         echo "SDK_PATH=$PWD" >> $GITHUB_ENV
 
+    - name: ssh连接
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ inputs.TERMINAL }}
 
     - name: 编译packages
       id: compile
@@ -107,25 +114,21 @@ jobs:
         cd ${{ env.SDK_PATH }}
         chmod +x ${GITHUB_WORKSPACE}/packages/compile_packages.sh
         ${GITHUB_WORKSPACE}/packages/compile_packages.sh
+        cp public-key.pem bin/packages/aarch64_generic/external/
         cd ${{ env.SDK_PATH }}/bin/
-        mkdir dists
-        tar -zcvf packages.tar.gz packages
-        mv packages.tar.gz dists/
-        rm -rf packages
-        echo "FIRMWARE_PATH=$PWD/dists" >> $GITHUB_ENV
+        tar -zcf packages.tar.gz packages/aarch64_generic/external
+        mv packages.tar.gz packages/aarch64_generic/external/
+        echo "FIRMWARE_PATH=$PWD/packages/aarch64_generic/external" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
 
 
-    - name: ssh连接
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: ${{ inputs.TERMINAL }}
 
     - name: 上传发布固件
       if: steps.compile.outputs.status == 'success'
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v1.20.0
       with:
-        name: R${{ env.DATE }} Packages 
+        name: external-packages 
         commit: ${{ github.sha }}
         allowUpdates: true
         tag: ${{ env.TAG_DATE }}-packages
