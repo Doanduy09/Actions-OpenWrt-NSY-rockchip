@@ -12,7 +12,11 @@ on:
         default: false
         type: boolean
 
-          
+permissions:
+  contents: read
+  pages: write
+  id-token: write         
+  
 env:
 
   SDK_URL: https://github.com/robinZhao/Actions-OpenWrt-NSY/releases/download/2026.01.16-23.20_all_in-openwrt-g68-plus/2026.01.16_all_in-openwrt-sdk-25.12.0-rc2-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64.tar.zst
@@ -24,7 +28,8 @@ env:
 jobs:
   Build:
     runs-on: ubuntu-24.04
-
+    environment:
+    #  url: ${{ steps.deployment.outputs.page_url }}
     outputs:
       COMMIT_AUTHOR: ${{ steps.clone.outputs.COMMIT_AUTHOR }}
       COMMIT_DATE: ${{ steps.clone.outputs.COMMIT_DATE }}
@@ -112,27 +117,26 @@ jobs:
       id: compile
       run: |
         cd ${{ env.SDK_PATH }}
-        chmod +x ${GITHUB_WORKSPACE}/packages/compile_packages.sh
+        chmod +x ${GITHUB_WORKSPACE}/packages/*.sh
         ${GITHUB_WORKSPACE}/packages/compile_packages.sh
         cp public-key.pem bin/packages/aarch64_generic/external/
         cd ${{ env.SDK_PATH }}/bin/
         tar -zcf packages.tar.gz packages/aarch64_generic/external
         mv packages.tar.gz packages/aarch64_generic/external/
-        echo "FIRMWARE_PATH=$PWD/packages/aarch64_generic/external" >> $GITHUB_ENV
+        cd packages/aarch64_generic/external/
+        ${GITHUB_WORKSPACE}/packages/page_gen.sh > index.html
+        echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
-
-
-
-    - name: 上传发布固件
+    - name: Upload artifact
       if: steps.compile.outputs.status == 'success'
-      uses: ncipollo/release-action@v1.20.0
+      uses: actions/upload-pages-artifact@v3
       with:
-        name: external-packages 
-        commit: ${{ github.sha }}
-        allowUpdates: true
-        tag: ${{ env.TAG_DATE }}-packages
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: ${{ env.FIRMWARE_PATH }}/*
-        body: |
-          **This is OpenWrt Packages**
+        # Upload entire repository
+        path: '${{ env.FIRMWARE_PATH }}'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+

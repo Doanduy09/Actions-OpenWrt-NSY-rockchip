@@ -6,7 +6,8 @@ sed -i "1i src-link external $dir/custfeed" feeds.conf.default
 git clone https://github.com/pppoex/openwrt-packages.git pppoex
 mv pppoex/luci-app-cpufreq custfeed/
 git clone https://github.com/sirpdboy/luci-app-ddns-go.git custfeed/luci-app-ddns-go
-git clone https://github.com/zhengmz/luci-app-zerotier custfeed/luci-app-zerotier
+git clone https://github.com/QiDream-hub/luci-app-zerotier.git custfeed/luci-app-zerotier
+
 
 ./scripts/feeds update -a
 ./scripts/feeds install -p external -a
