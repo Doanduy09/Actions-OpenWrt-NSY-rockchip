@@ -127,7 +127,18 @@ jobs:
         ${GITHUB_WORKSPACE}/packages/page_gen.sh > index.html
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
-
+    - name: 上传发布固件
+      if: steps.compile.outputs.status == 'success'
+      uses: ncipollo/release-action@v1.20.0
+      with:
+        name: external-packages 
+        commit: ${{ github.sha }}
+        allowUpdates: true
+        tag: ${{ env.TAG_DATE }}-packages
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ${{ env.FIRMWARE_PATH }}/*
+        body: |
+          **This is OpenWrt Packages**
     - name: Upload artifact
       if: steps.compile.outputs.status == 'success'
       uses: actions/upload-pages-artifact@v3
