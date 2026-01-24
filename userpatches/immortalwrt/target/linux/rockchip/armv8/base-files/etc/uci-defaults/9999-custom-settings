@@ -26,9 +26,7 @@ set https-dns-proxy.@https-dns-proxy[-1].isten_port='5054'
 commit https-dns-proxy
 EOF
 
-sed -i '$ a\net.netfilter.nf_conntrack_max=65535' /etc/sysctl.d/11-nf-conntrack.conf
-
-## set key_type to dsa resolve uhttpd crash
-uci set uhttpd.defaults.key_type='dsa'
+[ -f /etc/sysctl.d/11-nf-conntrack.conf ] && sed -i '$ a\net.netfilter.nf_conntrack_max=65535' /etc/sysctl.d/11-nf-conntrack.conf
+[ -f /etc/samba/smb.conf.template ] && sed -i.bak '/workgroup.*$/a\\tpreferred master = yes;\n\tdomain master = yes;' /etc/samba/smb.conf.template
 
 exit 0
