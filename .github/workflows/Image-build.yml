@@ -19,7 +19,7 @@ permissions:
   
 env:
 
-  SDK_URL: https://github.com/robinZhao/Actions-OpenWrt-NSY/releases/download/2026.01.23-23.52_all_in-openwrt-g68-plus/2026.01.23_all_in-openwrt-imagebuilder-25.12.0-rc3-rockchip-armv8.Linux-x86_64.tar.zst
+  SDK_URL: https://github.com/robinZhao/Actions-OpenWrt-NSY/releases/download/2026.01.26-16.26_all_in-openwrt-g68-plus/2026.01.26_all_in-openwrt-imagebuilder-25.12.0-rc3-rockchip-armv8.Linux-x86_64.tar.zst
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   SIGN_KEY: ${{ secrets.PRIVATE_SIGN_KEY }}
