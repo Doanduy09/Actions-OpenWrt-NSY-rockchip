@@ -125,6 +125,8 @@ jobs:
         echo $downloadurl/packages/aarch64_generic/routing/packages.adb >> ./repositories
         echo $downloadurl/packages/aarch64_generic/telephony/packages.adb >> ./repositories
         echo $downloadurl/packages/aarch64_generic/video/packages.adb >> ./repositories
+        # standalone not read repositories
+        sed -i -e 's/^CONFIG_IB_STANDALONE=y$/# CONFIG_IB_STANDALONE is not set/'
         cp -rp $GITHUB_WORKSPACE/image-builder/* ./
         chmod +x *.sh
         ./make_no_wifi_dsa.sh
